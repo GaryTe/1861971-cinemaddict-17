@@ -2,7 +2,7 @@ import {createElement} from '../render.js';
 
 const createButtonsShowMore = () => '<button class="films-list__show-more">Show more</button>';
 
-export  default class ButtonsShowMore {
+export  default class ShowMoreButton {
   getTemplate() {
     return createButtonsShowMore();
   }
