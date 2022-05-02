@@ -1,4 +1,5 @@
 import UserTitle from '../view/user-title-view.js';
+import MainFilterElements from '../view/main-filter.js';
 import FilterElements from '../view/filter-view.js';
 import CardMovie from '../view/movie-card-view.js';
 import ShowMoreButton from '../view/button-show-more.js';
@@ -14,6 +15,8 @@ export default class DrawingMarkupElementsPresenter {
     const headerLogo = document.querySelector('.header');
     this.placeForTitleUser = headerLogo;
     render(new UserTitle(), this.placeForTitleUser);
+
+    render(new MainFilterElements(), this.containerForRendering);
 
     render(new FilterElements(), this.containerForRendering);
     render(new FilmContainer(), this.containerForRendering);

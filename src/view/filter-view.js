@@ -7,7 +7,7 @@ const createButtonsFilter = () =>
 <li><a href="#" class="sort__button">Sort by rating</a></li>
 </ul>`;
 
-export  default class FilterElements {
+export default class FilterElements {
   getTemplate() {
     return createButtonsFilter();
   }
