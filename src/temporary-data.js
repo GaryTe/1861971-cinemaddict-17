@@ -1,4 +1,4 @@
-import { getRandomArrayElement } from './utils.js';
+import {getRandomArrayElement} from './utils.js';
 
 const commentText = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -68,15 +68,17 @@ const filmDescription = () => ({
     },
     'runtime': 77,
     'genre': [
-      'Comedy'
+      'Comedy',
+      'Western',
+      'Film-Noir'
     ],
     'description': 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
   },
   'userDetails': {
-    'watchlist': false,
-    'already_watched': true,
-    'watchingDate': '2019-04-12T16:12:32.554Z',
-    'favorite': false
+    'watchlist': true,
+    'already_watched': false,
+    'watchingDate': '2019-04-12T11:12:32.554Z',
+    'favorite': true
   }
 });
 

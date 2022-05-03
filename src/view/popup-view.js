@@ -1,8 +1,43 @@
 import {createElement} from '../render.js';
+import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
 
 const createPopup = (substitutionData) =>{
-  const {filmInfo,userDetails,comments} = substitutionData[0];
+  const {filmInfo,userDetails,comments,} = substitutionData[0];
 
+  const dataClass = 'film-details__control-button--active';
+
+  function decodedData () {
+    if(filmInfo['release'].date !== null){
+      return receiptDate(filmInfo['release'].date);
+    }
+    return '';
+  }
+
+  function decodedTime () {
+    if(userDetails.watchingDate !== null){
+      return receiptTime(userDetails.watchingDate);
+    }
+    return '';
+  }
+
+  function determineNumberGenres () {
+    if (filmInfo.genre.length-1 > 0){
+      return 'Genres';
+    }
+    return 'Genre';
+  }
+  /*
+  function creatingElements () {
+    const arrayGenres = [];
+    for(let i=0; i<filmInfo.genre.length; i++){
+      const listGenre = document.createElement('span');
+      listGenre.classList.add('film-details__genre');
+      listGenre.textContent = filmInfo.genre;
+      arrayGenres.push(listGenre);
+    }
+    return arrayGenres;
+  }
+*/
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -44,22 +79,23 @@ const createPopup = (substitutionData) =>{
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${filmInfo['release'].date}</td>
+              <td class="film-details__cell">${decodedData()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${userDetails.watchingDate}</td>
+              <td class="film-details__cell">${decodedTime()}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
               <td class="film-details__cell">${filmInfo['release'].release_country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">${determineNumberGenres()}</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+              <span class="film-details__genre">${filmInfo.genre.length === 1 || filmInfo.genre.length === 2 || filmInfo.genre.length === 3 ? filmInfo.genre[0] : ''}</span>
+                <span class="film-details__genre">${filmInfo.genre.length === 2 || filmInfo.genre.length === 3 ? filmInfo.genre[1] : ''}</span>
+                <span class="film-details__genre">${filmInfo.genre.length === 3 ? filmInfo.genre[2] : ''}</span>
+              </td>
             </tr>
           </table>
 
@@ -70,9 +106,9 @@ const createPopup = (substitutionData) =>{
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${addToWatchlist(userDetails.watchlist, dataClass)}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${addAlreadyWatched(userDetails.already_watched, dataClass)}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${addAddToFavorites(userDetails.favorite, dataClass)}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
