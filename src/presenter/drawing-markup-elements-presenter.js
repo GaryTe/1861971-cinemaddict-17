@@ -9,8 +9,10 @@ import {render} from '../render.js';
 
 export default class DrawingMarkupElementsPresenter {
 
-  init = (renderingContainer) => {
+  init = (renderingContainer,generatorObject) => {
     this.containerForRendering = renderingContainer;
+    this.generatorObject = generatorObject;
+    this.containerForObject = [...this.generatorObject.getObject()];
 
     const headerLogo = document.querySelector('.header');
     this.placeForTitleUser = headerLogo;
@@ -23,8 +25,8 @@ export default class DrawingMarkupElementsPresenter {
 
     const filmsListContainer = document.querySelector('.films-list__container');
     this.filmsContainer = filmsListContainer;
-    for(let i=0; i<5; i++){
-      render(new CardMovie(), this.filmsContainer);
+    for(let i=0; i<this.containerForObject.length; i++){
+      render(new CardMovie(this.containerForObject[i]), this.filmsContainer);
     }
 
     const filmsList = document.querySelector('.films-list');
@@ -33,7 +35,7 @@ export default class DrawingMarkupElementsPresenter {
 
     const body = document.querySelector('body');
     this.placeForPopup = body;
-    render(new PopupForInformation(), this.placeForPopup);
+    render(new PopupForInformation(this.containerForObject), this.placeForPopup);
 
   };
 }
