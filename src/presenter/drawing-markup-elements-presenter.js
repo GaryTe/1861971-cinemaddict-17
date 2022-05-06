@@ -1,41 +1,39 @@
 import UserTitle from '../view/user-title-view.js';
-import MainFilterElements from '../view/main-filter.js';
-import FilterElements from '../view/filter-view.js';
-import CardMovie from '../view/movie-card-view.js';
-import ShowMoreButton from '../view/button-show-more.js';
+import MainFilterElements from '../view/main-filter-elements-view.js';
+import FilterElements from '../view/filter-elements-view.js';
+import CardMovie from '../view/card-movie-view.js';
+import ShowMoreButton from '../view/show-more-button-view.js';
 import FilmContainer from '../view/film-container-view.js';
-import PopupForInformation from '../view/popup-view.js';
+import PopupForInformation from '../view/popup-for-information-view.js';
 import {render} from '../render.js';
 
 export default class DrawingMarkupElementsPresenter {
 
   init = (renderingContainer,generatorObject) => {
-    this.containerForRendering = renderingContainer;
-    this.generatorObject = generatorObject;
-    this.containerForObject = [...this.generatorObject.getObject()];
+
+    this.containerForDescribingMovieCard = [...generatorObject.getObject()];
 
     const headerLogo = document.querySelector('.header');
-    this.placeForTitleUser = headerLogo;
-    render(new UserTitle(), this.placeForTitleUser);
+    render(new UserTitle(), headerLogo);
 
-    render(new MainFilterElements(), this.containerForRendering);
+    render(new MainFilterElements(), renderingContainer);
 
-    render(new FilterElements(), this.containerForRendering);
-    render(new FilmContainer(), this.containerForRendering);
+    render(new FilterElements(), renderingContainer);
+    render(new FilmContainer(), renderingContainer);
 
     const filmsListContainer = document.querySelector('.films-list__container');
-    this.filmsContainer = filmsListContainer;
-    for(let i=0; i<this.containerForObject.length; i++){
-      render(new CardMovie(this.containerForObject[i]), this.filmsContainer);
-    }
+
+    let indicatorsForComments = 0;
+    this.containerForDescribingMovieCard.forEach((value,index)=>{
+      render(new CardMovie(value), filmsListContainer);
+      indicatorsForComments =  index;
+    });
 
     const filmsList = document.querySelector('.films-list');
-    this.placeForButton = filmsList;
-    render(new ShowMoreButton(), this.placeForButton);
+    render(new ShowMoreButton(), filmsList);
 
     const body = document.querySelector('body');
-    this.placeForPopup = body;
-    render(new PopupForInformation(this.containerForObject), this.placeForPopup);
+    render(new PopupForInformation(this.containerForDescribingMovieCard, indicatorsForComments), body);
 
   };
 }

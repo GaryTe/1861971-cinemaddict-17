@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
 import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
 
-const createPopup = (substitutionData) =>{
+const createPopup = (substitutionData, indicatorsForComments) =>{
   const {filmInfo,userDetails,comments,} = substitutionData[0];
 
   const dataClass = 'film-details__control-button--active';
@@ -26,18 +26,7 @@ const createPopup = (substitutionData) =>{
     }
     return 'Genre';
   }
-  /*
-  function creatingElements () {
-    const arrayGenres = [];
-    for(let i=0; i<filmInfo.genre.length; i++){
-      const listGenre = document.createElement('span');
-      listGenre.classList.add('film-details__genre');
-      listGenre.textContent = filmInfo.genre;
-      arrayGenres.push(listGenre);
-    }
-    return arrayGenres;
-  }
-*/
+
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -122,7 +111,7 @@ const createPopup = (substitutionData) =>{
               <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
             </span>
             <div>
-              <p class="film-details__comment-text">Interesting setting and a good cast</p>
+              <p class="film-details__comment-text">${indicatorsForComments <= 4 ? comments[0].comment : ''}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">Tim Macoveev</span>
                 <span class="film-details__comment-day">2019/12/31 23:59</span>
@@ -135,7 +124,7 @@ const createPopup = (substitutionData) =>{
               <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji-sleeping">
             </span>
             <div>
-              <p class="film-details__comment-text">Booooooooooring</p>
+              <p class="film-details__comment-text">${indicatorsForComments <= 4 ? comments[1].comment : ''}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">John Doe</span>
                 <span class="film-details__comment-day">2 days ago</span>
@@ -148,7 +137,7 @@ const createPopup = (substitutionData) =>{
               <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji-puke">
             </span>
             <div>
-              <p class="film-details__comment-text">Very very old. Meh</p>
+              <p class="film-details__comment-text">${indicatorsForComments <= 4 ? comments[2].comment : ''}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">John Doe</span>
                 <span class="film-details__comment-day">2 days ago</span>
@@ -161,7 +150,7 @@ const createPopup = (substitutionData) =>{
               <img src="./images/emoji/angry.png" width="55" height="55" alt="emoji-angry">
             </span>
             <div>
-              <p class="film-details__comment-text">Almost two hours? Seriously?</p>
+              <p class="film-details__comment-text">${indicatorsForComments <= 4 ? comments[3].comment : ''}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">John Doe</span>
                 <span class="film-details__comment-day">Today</span>
@@ -206,12 +195,13 @@ const createPopup = (substitutionData) =>{
   );
 };
 export  default class PopupForInformation {
-  constructor(substitutionData){
+  constructor(substitutionData, indicatorsForComments){
     this.substitutionData = substitutionData;
+    this.indicatorsForComments = indicatorsForComments;
   }
 
   getTemplate() {
-    return createPopup(this.substitutionData);
+    return createPopup(this.substitutionData, this.indicatorsForComments);
   }
 
   getElement() {

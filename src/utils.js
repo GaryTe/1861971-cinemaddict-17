@@ -14,7 +14,7 @@ const receiptDate = (dueDate) => dayjs(dueDate).format('D MMMM');
 const receiptTime = (dueTime) => dayjs(dueTime).format('H : mm');
 
 function addToWatchlist (data,classAssignment) {
-  if(data === true){
+  if(data){
     return  classAssignment;
   }
   return '';
@@ -28,4 +28,4 @@ function addAddToFavorites (data, classAssignment) {
   return addToWatchlist (data, classAssignment);
 }
 
-export {getRandomArrayElement, receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites};
+export {getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites};

@@ -1,4 +1,4 @@
-import {getRandomArrayElement} from './utils.js';
+import {getRandomArrayElement, getRandomPositiveInteger} from './utils.js';
 
 const commentText = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -36,8 +36,14 @@ const postrers = [
   './images/posters/the-man-with-the-golden-am.jpg'
 ];
 
+const description = [
+  'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.',
+  'Классика это класс, не то что сейчас, одни спецэффекты.',
+  'Я бы посмотрел фильм "Майор Пэйн".'
+];
+
 const comment = () => ({
-  'id': '42',
+  'id': getRandomPositiveInteger(0, 42),
   'author': 'Ilya O\'Reilly',
   'comment': getRandomArrayElement(commentText),
   'date': '2019-05-11T16:12:32.554Z',
@@ -47,14 +53,14 @@ const comment = () => ({
 const arrayComment = Array.from({length: 5}, comment);
 
 const filmDescription = () => ({
-  'id': '0',
+  'id': getRandomPositiveInteger(0, 42),
   'comments': arrayComment,
   'filmInfo': {
     'title': getRandomArrayElement(movieTitle),
     'alternative_title': 'Laziness Who Sold Themselves',
     'totalRating': 5.3,
     'poster': getRandomArrayElement(postrers),
-    'age_rating': 0,
+    'age_rating': 18,
     'director': 'Tom Ford',
     'writers': [
       'Takeshi Kitano'
@@ -72,13 +78,13 @@ const filmDescription = () => ({
       'Western',
       'Film-Noir'
     ],
-    'description': 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
+    'description': getRandomArrayElement(description)
   },
   'userDetails': {
-    'watchlist': true,
-    'already_watched': false,
-    'watchingDate': '2019-04-12T11:12:32.554Z',
-    'favorite': true
+    'watchlist': Boolean(getRandomPositiveInteger(0, 1)),
+    'already_watched': Boolean(getRandomPositiveInteger(0, 1)),
+    'watchingDate': '2019-04-12T02:12:32.554Z',
+    'favorite': Boolean(getRandomPositiveInteger(0, 1))
   }
 });
 

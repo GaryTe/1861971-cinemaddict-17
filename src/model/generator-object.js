@@ -1,7 +1,8 @@
 import { filmDescription } from '../temporary-data.js';
 
-export default class GeneratorObject {
-  generator = Array.from({length: 5}, filmDescription);
+const listOfMovieObject = 5;
+export default class GeneratorArrayObject {
+  generator = Array.from({length: listOfMovieObject}, filmDescription);
 
   getObject = () => this.generator;
 
