@@ -1,9 +1,9 @@
-import DrawingMarkupElementsPresenter from './presenter/drawing-markup-elements-presenter.js';
-import GeneratorArrayObject from './model/generator-object.js';
+import InterfaceRenderingPresenter from './presenter/interface-rendering-presenter.js';
+import FilmsModel from './model/films-model.js';
 
 const siteMainElement = document.querySelector('.main');
 
-const drawingElementsPresenter = new DrawingMarkupElementsPresenter();
-const generatorObject = new GeneratorArrayObject();
+const interfaceRendering = new InterfaceRenderingPresenter();
+const films = new FilmsModel();
 
-drawingElementsPresenter.init(siteMainElement,generatorObject);
+interfaceRendering.init(siteMainElement,films);

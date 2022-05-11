@@ -8,7 +8,7 @@ const mainNavigationFilter = () =>
 <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
 </nav>`;
 
-export default class MainFilterElements {
+export default class MainFilterElementsView {
   getTemplate() {
     return mainNavigationFilter();
   }

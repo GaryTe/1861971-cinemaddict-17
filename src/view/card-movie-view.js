@@ -1,10 +1,10 @@
 import {createElement} from '../render.js';
 import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
 
-const createMovieCard = (substitutionData) =>{
-  const {filmInfo,userDetails,comments} = substitutionData;
+const createMovieCard = (film) =>{
+  const {filmInfo,userDetails,comments} = film;
 
-  const dataClass = 'film-card__controls-item--active';
+  const classForElements = 'film-card__controls-item--active';
 
   function decodedData () {
     if(filmInfo['release'].date !== null){
@@ -45,21 +45,21 @@ const createMovieCard = (substitutionData) =>{
     <span class="film-card__comments">${comments.length} comments</span>
   </a>
   <div class="film-card__controls">
-    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${addToWatchlist(userDetails.watchlist, dataClass)}" type="button">Add to watchlist</button>
-    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${addAlreadyWatched(userDetails.already_watched, dataClass)}" type="button">Mark as watched</button>
-    <button class="film-card__controls-item film-card__controls-item--favorite ${addAddToFavorites(userDetails.favorite, dataClass)}" type="button">Mark as favorite</button>
+    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${addToWatchlist(userDetails.watchlist, classForElements)}" type="button">Add to watchlist</button>
+    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${addAlreadyWatched(userDetails.already_watched, classForElements)}" type="button">Mark as watched</button>
+    <button class="film-card__controls-item film-card__controls-item--favorite ${addAddToFavorites(userDetails.favorite, classForElements)}" type="button">Mark as favorite</button>
   </div>
 </article>`
   );
 };
-export  default class CardMovie {
+export  default class CardMovieView {
 
-  constructor(substitutionData){
-    this.substitutionData = substitutionData;
+  constructor(film){
+    this.film = film;
   }
 
   getTemplate() {
-    return createMovieCard(this.substitutionData);
+    return createMovieCard(this.film);
   }
 
   getElement() {

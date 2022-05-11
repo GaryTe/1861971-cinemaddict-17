@@ -50,11 +50,11 @@ const comment = () => ({
   'emotion': getRandomArrayElement(emotion)
 });
 
-const arrayComment = Array.from({length: 5}, comment);
+const comments = Array.from({length: 5}, comment);
 
 const filmDescription = () => ({
   'id': getRandomPositiveInteger(0, 42),
-  'comments': arrayComment,
+  'comments': comments,
   'filmInfo': {
     'title': getRandomArrayElement(movieTitle),
     'alternative_title': 'Laziness Who Sold Themselves',
