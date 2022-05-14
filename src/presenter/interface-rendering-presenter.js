@@ -29,8 +29,54 @@ export default class InterfaceRenderingPresenter {
     const body = document.querySelector('body');
 
     for(let i=0; i<this.containerForDescribingMovieCard.length; i++){
-      render (new CardMovieView(this.containerForDescribingMovieCard[i]), filmsListContainer);
-      render(new PopupForInformationView(this.containerForDescribingMovieCard[i]), body);
+      callPopup(this.containerForDescribingMovieCard[i]);
+    }
+
+    function callPopup (films){
+      render (new CardMovieView(films), filmsListContainer);
+      const filmCards = document.querySelectorAll('.film-card');
+
+      for(const filmCard of filmCards){
+        filmCard.addEventListener('click',(evt)=> {
+          const target = evt.target.src.split('/');
+          const imageAddress = films.filmInfo.poster.split('/');
+          if(imageAddress[imageAddress.length-1] === target[target.length-1]){
+            render(new PopupForInformationView(films), body);
+            body.classList.add('hide-overflow');
+            addEventHandler();
+            checkingOpenPopups();
+          }
+        });
+      }
+
+      function addEventHandler (){
+        const closeButtons = document.querySelectorAll('.film-details__close-btn');
+        for(const closeButton of closeButtons){
+          closeButton.addEventListener('click',closePopup);
+        }
+        document.addEventListener('keydown',popupCloseKey);
+      }
+
+      function popupCloseKey (evt){
+        if(evt.key === 'Escape'){
+          closePopup();
+        }
+      }
+
+      function closePopup (){
+        document.removeEventListener('keydown', popupCloseKey);
+        const oldChild = document.querySelector('.film-details');
+        body.removeChild(oldChild);
+        body.classList.remove('hide-overflow');
+      }
+
+      function checkingOpenPopups (){
+        const popups = document.querySelectorAll('.film-details');
+        if (popups.length > 1){
+          body.removeChild(popups[0]);
+        }
+      }
+
     }
   };
 }
