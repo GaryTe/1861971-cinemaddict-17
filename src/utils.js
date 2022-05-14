@@ -28,4 +28,14 @@ function addAddToFavorites (data, classAssignment) {
   return addToWatchlist (data, classAssignment);
 }
 
-export {getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites};
+function createElements () {
+  let element = '<span class="film-details__genre"></span>';
+  for(let i=0; i<1; i++){
+    element = document.createElement('span');
+    element.classList.add('film-details__genre');
+    element.textContent = 'Comedy';
+  }
+  return element;
+}
+
+export {getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites,createElements};

@@ -59,9 +59,6 @@ const createPopup = (substitutionData) =>{
     return list;
   }
 
-  console.log(createElements());
-  console.log(getCommentsList());
-
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
