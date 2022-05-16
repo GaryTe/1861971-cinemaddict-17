@@ -1,7 +1,9 @@
-import DrawingMarkupElementsPresenter from './presenter/drawing-markup-elements-presenter.js';
+import InterfaceRenderingPresenter from './presenter/interface-rendering-presenter.js';
+import FilmsModel from './model/films-model.js';
 
 const siteMainElement = document.querySelector('.main');
 
-const drawingElementsPresenter = new DrawingMarkupElementsPresenter();
+const interfaceRendering = new InterfaceRenderingPresenter();
+const films = new FilmsModel();
 
-drawingElementsPresenter.init(siteMainElement);
+interfaceRendering.init(siteMainElement,films);
