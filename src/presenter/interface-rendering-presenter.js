@@ -10,98 +10,103 @@ import {render} from '../render.js';
 
 const numberOfDrawnFilmsPerTime = 5;
 
+function searchElement(element) {
+  return document.querySelector(`${element}`);
+}
+
 export default class InterfaceRenderingPresenter {
+  headerLogo = document.querySelector('.header');
+  siteMainElement = document.querySelector('.main');
+  body = document.querySelector('body');
+  counterOfNumberOfRenderedFilms = numberOfDrawnFilmsPerTime;
 
-  init = (renderingContainer,generatorObject) => {
+  constructor(generatorObject){
+    this.films =[...generatorObject.getFilms()];
+  }
 
-    let counterOfNumberOfRenderedFilms = numberOfDrawnFilmsPerTime;
-    this.containerForDescribingMovieCard = [...generatorObject.getFilms()];
-    const movieCards = this.containerForDescribingMovieCard;
-
-    const headerLogo = document.querySelector('.header');
-    render(new UserTitleView(), headerLogo);
-
-    render(new MainFilterElementsView(), renderingContainer);
-
-    render(new FilterElementsView(), renderingContainer);
-    render(new FilmContainerView(), renderingContainer);
-
-    const filmsList = document.querySelector('.films-list');
-    this.showMoreButtonView = new ShowMoreButtonView();
-
-    const filmsListContainer = document.querySelector('.films-list__container');
-    const body = document.querySelector('body');
-
-    if(this.containerForDescribingMovieCard.every((value) => value === 0)){
-      render(new NoTaskView(), filmsList);
-    }else{
-      for(let i=0; i<Math.min(this.containerForDescribingMovieCard.length, numberOfDrawnFilmsPerTime); i++){
-        callPopup(this.containerForDescribingMovieCard[i]);
-      }
-    }
-
-    if(this.containerForDescribingMovieCard.length > numberOfDrawnFilmsPerTime){
-      render(this.showMoreButtonView,filmsList);
-      const showMore = document.querySelector('.films-list__show-more');
-      showMore.addEventListener('click', showMovieCards);
-    }
-
-    function showMovieCards (){
-      movieCards
-        .slice(counterOfNumberOfRenderedFilms, counterOfNumberOfRenderedFilms + numberOfDrawnFilmsPerTime)
-        .forEach((value)=>{callPopup(value);});
-      counterOfNumberOfRenderedFilms += numberOfDrawnFilmsPerTime;
-      if(counterOfNumberOfRenderedFilms >= movieCards.length){
-        const oldShowMoreButton = document.querySelector('.films-list__show-more');
-        filmsList.removeChild(oldShowMoreButton);
-      }
-    }
-
-    function callPopup (films){
-      render (new CardMovieView(films), filmsListContainer);
-      const filmCards = document.querySelectorAll('.film-card');
-
-      for(const filmCard of filmCards){
-        filmCard.addEventListener('click',(evt)=> {
-          const target = evt.target.src.split('/');
-          const imageAddress = films.filmInfo.poster.split('/');
-          if(imageAddress[imageAddress.length-1] === target[target.length-1]){
-            render(new PopupForInformationView(films), body);
-            body.classList.add('hide-overflow');
-            addEventHandler();
-            checkingOpenPopups();
-          }
-        });
-      }
-
-      function addEventHandler (){
-        const closeButtons = document.querySelectorAll('.film-details__close-btn');
-        for(const closeButton of closeButtons){
-          closeButton.addEventListener('click',closePopup);
-        }
-        document.addEventListener('keydown',popupCloseKey);
-      }
-
-      function popupCloseKey (evt){
-        if(evt.key === 'Escape'){
-          closePopup();
-        }
-      }
-
-      function closePopup (){
-        document.removeEventListener('keydown', popupCloseKey);
-        const oldChild = document.querySelector('.film-details');
-        body.removeChild(oldChild);
-        body.classList.remove('hide-overflow');
-      }
-
-      function checkingOpenPopups (){
-        const popups = document.querySelectorAll('.film-details');
-        if (popups.length > 1){
-          body.removeChild(popups[0]);
-        }
-      }
-
-    }
+  init = () => {
+    render(new UserTitleView(), this.headerLogo);
+    render(new MainFilterElementsView(), this.siteMainElement);
+    render(new FilterElementsView(), this.siteMainElement);
+    render(new FilmContainerView(), this.siteMainElement);
+    this.renderingDocument();
   };
+
+
+  renderingDocument () {
+    if(this.films.every((value) => value === 0)){
+      render(new NoTaskView(), searchElement('.films-list'));
+    }else{
+      for(let i=0; i<Math.min(this.films.length, numberOfDrawnFilmsPerTime); i++){
+        this.callPopup(this.films[i]);
+      }
+    }
+
+    if(this.films.length > numberOfDrawnFilmsPerTime){
+      render(new ShowMoreButtonView(), searchElement('.films-list'));
+      const showMore = document.querySelector('.films-list__show-more');
+      showMore.addEventListener('click', this.showMovieCards);
+    }
+  }
+
+  showMovieCards (){
+    this.films
+      .slice(this.counterOfNumberOfRenderedFilms, this.counterOfNumberOfRenderedFilms + numberOfDrawnFilmsPerTime)
+      .forEach((value)=>{this.callPopup(value);});
+    this.counterOfNumberOfRenderedFilms += numberOfDrawnFilmsPerTime;
+    if(this.counterOfNumberOfRenderedFilms >= this.films.length){
+      const oldShowMoreButton = document.querySelector('.films-list__show-more');
+      searchElement('.films-list').removeChild(oldShowMoreButton);
+    }
+  }
+
+  closePopup (){
+    document.removeEventListener('keydown', this.popupCloseKey);
+    const oldChild = document.querySelector('.film-details');
+    const body = document.querySelector('body');
+    body.removeChild(oldChild);
+    body.classList.remove('hide-overflow');
+  }
+
+  popupCloseKey (evt){
+    if(evt.key === 'Escape'){
+      this.closePopup();
+    }
+  }
+
+  addEventHandler (){
+    const closeButtons = document.querySelectorAll('.film-details__close-btn');
+    for(const closeButton of closeButtons){
+      closeButton.addEventListener('click', this.closePopup);
+    }
+    document.addEventListener('keydown',this.popupCloseKey);
+  }
+
+  checkingOpenPopups (){
+    const popups = document.querySelectorAll('.film-details');
+    if (popups.length > 1){
+      this.body.removeChild(popups[0]);
+    }
+  }
+
+  callPopup (films){
+    const filmsListContainer = document.querySelector('.films-list__container');
+    render (new CardMovieView(films), filmsListContainer);
+    const filmCards = document.querySelectorAll('.film-card');
+
+    for(const filmCard of filmCards){
+      filmCard.addEventListener('click',(evt)=> {
+        const target = evt.target.src.split('/');
+        const imageAddress = films.filmInfo.poster.split('/');
+        if(imageAddress[imageAddress.length-1] === target[target.length-1]){
+          render(new PopupForInformationView(films), this.body);
+          this.body.classList.add('hide-overflow');
+          this.addEventHandler();
+          this.checkingOpenPopups();
+        }
+      });
+    }
+  }
+
+
 }

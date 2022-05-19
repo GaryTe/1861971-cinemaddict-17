@@ -1,9 +1,8 @@
 import InterfaceRenderingPresenter from './presenter/interface-rendering-presenter.js';
 import FilmsModel from './model/films-model.js';
 
-const siteMainElement = document.querySelector('.main');
-
-const interfaceRendering = new InterfaceRenderingPresenter();
 const films = new FilmsModel();
+const interfaceRendering = new InterfaceRenderingPresenter(films);
 
-interfaceRendering.init(siteMainElement,films);
+
+interfaceRendering.init();
