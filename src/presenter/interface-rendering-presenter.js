@@ -14,6 +14,12 @@ function searchElement(element) {
   return document.querySelector(`${element}`);
 }
 
+function bindContext(context, fn) {
+  return function (...args) {
+    return fn.call(context, ...args);
+  };
+}
+
 export default class InterfaceRenderingPresenter {
   headerLogo = document.querySelector('.header');
   siteMainElement = document.querySelector('.main');
@@ -22,6 +28,7 @@ export default class InterfaceRenderingPresenter {
 
   constructor(generatorObject){
     this.films =[...generatorObject.getFilms()];
+    this.showMovieCards = bindContext(this, this.showMovieCards);
   }
 
   init = () => {
