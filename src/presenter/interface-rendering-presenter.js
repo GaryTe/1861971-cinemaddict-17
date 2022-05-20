@@ -14,12 +14,6 @@ function searchElement(element) {
   return document.querySelector(`${element}`);
 }
 
-function bindContext(context, fn) {
-  return function (...args) {
-    return fn.call(context, ...args);
-  };
-}
-
 export default class InterfaceRenderingPresenter {
   headerLogo = document.querySelector('.header');
   siteMainElement = document.querySelector('.main');
@@ -28,7 +22,6 @@ export default class InterfaceRenderingPresenter {
 
   constructor(generatorObject){
     this.films =[...generatorObject.getFilms()];
-    this.showMovieCards = bindContext(this, this.showMovieCards);
   }
 
   init = () => {
@@ -56,7 +49,7 @@ export default class InterfaceRenderingPresenter {
     }
   }
 
-  showMovieCards (){
+  showMovieCards = () => {
     this.films
       .slice(this.counterOfNumberOfRenderedFilms, this.counterOfNumberOfRenderedFilms + numberOfDrawnFilmsPerTime)
       .forEach((value)=>{this.callPopup(value);});
@@ -65,21 +58,20 @@ export default class InterfaceRenderingPresenter {
       const oldShowMoreButton = document.querySelector('.films-list__show-more');
       searchElement('.films-list').removeChild(oldShowMoreButton);
     }
-  }
+  };
 
-  closePopup (){
+  closePopup = () => {
     document.removeEventListener('keydown', this.popupCloseKey);
     const oldChild = document.querySelector('.film-details');
-    const body = document.querySelector('body');
-    body.removeChild(oldChild);
-    body.classList.remove('hide-overflow');
-  }
+    this.body.removeChild(oldChild);
+    this.body.classList.remove('hide-overflow');
+  };
 
-  popupCloseKey (evt){
+  popupCloseKey = (evt) => {
     if(evt.key === 'Escape'){
       this.closePopup();
     }
-  }
+  };
 
   addEventHandler (){
     const closeButtons = document.querySelectorAll('.film-details__close-btn');
