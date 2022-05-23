@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
 import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
+import AbstractView from '../framework/view/abstract-view';
 
 const createPopup = (substitutionData) =>{
   const {filmInfo,userDetails,comments,} = substitutionData;
@@ -167,25 +167,18 @@ const createPopup = (substitutionData) =>{
   </form>`
   );
 };
-export  default class PopupForInformationView {
+export  default class PopupForInformationView extends AbstractView{
+  #substitutionData;
+  #indicatorsForComments;
+
   constructor(substitutionData, indicatorsForComments){
-    this.substitutionData = substitutionData;
-    this.indicatorsForComments = indicatorsForComments;
+    super();
+    this.#substitutionData = substitutionData;
+    this.#indicatorsForComments = indicatorsForComments;
   }
 
-  getTemplate() {
-    return createPopup(this.substitutionData, this.indicatorsForComments);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createPopup(this.#substitutionData, this.#indicatorsForComments);
   }
 }
 

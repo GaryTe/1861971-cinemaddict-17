@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 
 const filmContainer = () =>
   `<section class="films">
@@ -6,19 +6,8 @@ const filmContainer = () =>
 <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
 <div class="films-list__container">`;
 
-export  default class FilmContainerView {
-  getTemplate() {
+export  default class FilmContainerView extends AbstractView{
+  get template() {
     return filmContainer();
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

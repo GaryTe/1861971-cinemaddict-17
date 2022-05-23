@@ -6,7 +6,7 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import PopupForInformationView from '../view/popup-for-information-view.js';
 import NoTaskView from '../view/no-task-view.js';
-import {render} from '../render.js';
+import {render} from '../framework/render.js';
 
 const NUMBER_DRAWING_MOVIE_CARDS = 5;
 
@@ -20,7 +20,9 @@ export default class InterfaceRenderingPresenter {
   #siteMainElement;
   #body;
   #counterOfNumberOfRenderedFilms;
-
+  #showMoreButton = new ShowMoreButtonView();
+  #cardMovie;
+  #movies;
   constructor(generatorObject){
     this.#films =[...generatorObject.getFilms()];
     this.#headerLogo = document.querySelector('.header');
@@ -44,13 +46,13 @@ export default class InterfaceRenderingPresenter {
     }else{
       for(let i=0; i<Math.min(this.#films.length, NUMBER_DRAWING_MOVIE_CARDS); i++){
         this.#callPopup(this.#films[i]);
+        this.#movies = this.#films[i];
       }
     }
 
     if(this.#films.length > NUMBER_DRAWING_MOVIE_CARDS){
-      render(new ShowMoreButtonView(), searchElement('.films-list'));
-      const showMore = document.querySelector('.films-list__show-more');
-      showMore.addEventListener('click', this.#showMovieCards);
+      render(this.#showMoreButton, searchElement('.films-list'));
+      this.#showMoreButton.setClickHandler(this.#showMovieCards);
     }
   }
 
@@ -95,9 +97,13 @@ export default class InterfaceRenderingPresenter {
 
   #callPopup (films){
     const filmsListContainer = document.querySelector('.films-list__container');
-    render (new CardMovieView(films), filmsListContainer);
-    const filmCards = document.querySelectorAll('.film-card');
+    this.#cardMovie= new CardMovieView(films);
+    render (this.#cardMovie, filmsListContainer);
+    this.#cardMovie.setClickHandler(this.#addHandlerCardMovie);
 
+
+    //const filmCards = document.querySelectorAll('.film-card');
+    /*
     for(const filmCard of filmCards){
       filmCard.addEventListener('click',(evt)=> {
         const target = evt.target.src.split('/');
@@ -110,7 +116,19 @@ export default class InterfaceRenderingPresenter {
         }
       });
     }
+*/
   }
 
+  #addHandlerCardMovie = () => {
+    const target = this.#cardMovie.data.src.split('/');
+    const imageAddress = this.#movies.filmInfo.poster.split('/');
+    console.log(target,imageAddress);
+    if(imageAddress[imageAddress.length-1] === target[target.length-1]){
+      render(new PopupForInformationView(this.#movies), this.#body);
+      this.#body.classList.add('hide-overflow');
+      this.#addEventHandler();
+      this.#checkingOpenPopups();
+    }
 
+  };
 }
