@@ -122,7 +122,6 @@ export default class InterfaceRenderingPresenter {
   #addHandlerCardMovie = () => {
     const target = this.#cardMovie.data.src.split('/');
     const imageAddress = this.#movies.filmInfo.poster.split('/');
-    console.log(target,imageAddress);
     if(imageAddress[imageAddress.length-1] === target[target.length-1]){
       render(new PopupForInformationView(this.#movies), this.#body);
       this.#body.classList.add('hide-overflow');
