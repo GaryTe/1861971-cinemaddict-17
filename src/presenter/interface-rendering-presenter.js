@@ -21,8 +21,9 @@ export default class InterfaceRenderingPresenter {
   #body;
   #counterOfNumberOfRenderedFilms;
   #showMoreButton = new ShowMoreButtonView();
+  #filmContainer = new FilmContainerView();
   #cardMovie;
-  #movies;
+  #movies = [];
   constructor(generatorObject){
     this.#films =[...generatorObject.getFilms()];
     this.#headerLogo = document.querySelector('.header');
@@ -35,7 +36,7 @@ export default class InterfaceRenderingPresenter {
     render(new UserTitleView(), this.#headerLogo);
     render(new MainFilterElementsView(), this.#siteMainElement);
     render(new FilterElementsView(), this.#siteMainElement);
-    render(new FilmContainerView(), this.#siteMainElement);
+    render(this.#filmContainer, this.#siteMainElement);
     this.#renderingDocument();
   };
 
@@ -46,7 +47,7 @@ export default class InterfaceRenderingPresenter {
     }else{
       for(let i=0; i<Math.min(this.#films.length, NUMBER_DRAWING_MOVIE_CARDS); i++){
         this.#callPopup(this.#films[i]);
-        this.#movies = this.#films[i];
+        this.#movies[i] = this.#films[i];
       }
     }
 
@@ -96,11 +97,10 @@ export default class InterfaceRenderingPresenter {
   }
 
   #callPopup (films){
-    const filmsListContainer = document.querySelector('.films-list__container');
+    //const filmsListContainer = document.querySelector('.films-list__container');
     this.#cardMovie= new CardMovieView(films);
-    render (this.#cardMovie, filmsListContainer);
-    this.#cardMovie.setClickHandler(this.#addHandlerCardMovie);
-
+    render(this.#cardMovie, this.#filmContainer.element);
+    this.#cardMovie.setClickHandler(this.#addHandlerCardMovie,this.#movies);
 
     //const filmCards = document.querySelectorAll('.film-card');
     /*
@@ -120,14 +120,11 @@ export default class InterfaceRenderingPresenter {
   }
 
   #addHandlerCardMovie = () => {
-    const target = this.#cardMovie.data.src.split('/');
-    const imageAddress = this.#movies.filmInfo.poster.split('/');
-    if(imageAddress[imageAddress.length-1] === target[target.length-1]){
-      render(new PopupForInformationView(this.#movies), this.#body);
-      this.#body.classList.add('hide-overflow');
-      this.#addEventHandler();
-      this.#checkingOpenPopups();
-    }
-
+    //console.log(this.#cardMovie);
+    render(new PopupForInformationView(this.#cardMovie.movie), this.#body);
+    this.#body.classList.add('hide-overflow');
+    this.#addEventHandler();
+    this.#checkingOpenPopups();
   };
+
 }

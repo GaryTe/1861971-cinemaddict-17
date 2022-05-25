@@ -54,7 +54,8 @@ const createMovieCard = (film) =>{
 };
 export  default class CardMovieView extends AbstractView{
   #film;
-  data;
+  datas;
+  movie;
   constructor(film){
     super();
     this.#film = film;
@@ -64,13 +65,21 @@ export  default class CardMovieView extends AbstractView{
     return createMovieCard(this.#film);
   }
 
-  setClickHandler = (callback) => {
+  setClickHandler = (callback, movies) => {
     this._callback.click = callback;
     this.element.addEventListener('click', this.#clickHandler);
+    this.datas = movies;
   };
 
   #clickHandler = (evt) => {
-    this.data = evt.target;
-    this._callback.click();
+    const target = evt.target.src.split('/');
+    for(let i=0; i<this.datas.length; i++){
+      const adds = this.datas[i].filmInfo.poster.split('/');
+      if(adds[adds.length-1] === target[target.length-1]){
+        this.movie = this.datas[i];
+        console.log(this.movie);
+        this._callback.click();
+      }
+    }
   };
 }
