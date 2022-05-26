@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
 import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
+import AbstractView from '../framework/view/abstract-view';
 
 const createMovieCard = (film) =>{
   const {filmInfo,userDetails,comments} = film;
@@ -52,24 +52,34 @@ const createMovieCard = (film) =>{
 </article>`
   );
 };
-export  default class CardMovieView {
-
+export  default class CardMovieView extends AbstractView{
+  #film;
+  datas;
+  movie;
   constructor(film){
-    this.film = film;
+    super();
+    this.#film = film;
   }
 
-  getTemplate() {
-    return createMovieCard(this.film);
+  get template() {
+    return createMovieCard(this.#film);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  setClickHandler = (callback, movies) => {
+    this._callback.click = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+    this.datas = movies;
+  };
+
+  #clickHandler = (evt) => {
+    const target = evt.target.src.split('/');
+    for(let i=0; i<this.datas.length; i++){
+      const adds = this.datas[i].filmInfo.poster.split('/');
+      if(adds[adds.length-1] === target[target.length-1]){
+        this.movie = this.datas[i];
+        console.log(this.movie);
+        this._callback.click();
+      }
     }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  };
 }
