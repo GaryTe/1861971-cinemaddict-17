@@ -1,4 +1,5 @@
 import {getRandomArrayElement, getRandomPositiveInteger} from './utils.js';
+import {nanoid} from 'nanoid';
 
 const commentText = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -53,7 +54,7 @@ const comment = () => ({
 const comments = Array.from({length: 5}, comment);
 
 const filmDescription = () => ({
-  'id': getRandomPositiveInteger(0, 42),
+  'id': nanoid(),
   'comments': comments,
   'filmInfo': {
     'title': getRandomArrayElement(movieTitle),

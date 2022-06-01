@@ -180,5 +180,14 @@ export  default class PopupForInformationView extends AbstractView{
   get template() {
     return createPopup(this.#substitutionData, this.#indicatorsForComments);
   }
+
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#clickHandler);
+  };
+
+  #clickHandler = () => {
+    this._callback.click();
+  };
 }
 

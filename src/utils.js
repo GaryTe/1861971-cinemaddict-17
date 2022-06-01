@@ -15,9 +15,9 @@ const receiptTime = (dueTime) => dayjs(dueTime).format('H : mm');
 
 function addToWatchlist (data,classAssignment) {
   if(data){
-    return  classAssignment;
+    return '' ;
   }
-  return '';
+  return classAssignment;
 }
 
 function addAlreadyWatched (data, classAssignment) {
@@ -38,4 +38,18 @@ function createElements () {
   return element;
 }
 
-export {getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites,createElements};
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+export {updateItem, getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites,createElements};
