@@ -1,10 +1,8 @@
-import {receiptDate, receiptTime, addToWatchlist} from '../utils.js';
+import {receiptDate, receiptTime} from '../utils.js';
 import AbstractView from '../framework/view/abstract-view';
 
 const createMovieCard = (film) =>{
-  const {filmInfo,userDetails,comments,isWatchlist} = film;
-
-  const classForElements = 'film-card__controls-item--active';
+  const {filmInfo,userDetails,comments} = film;
 
   function decodedData () {
     if(filmInfo['release'].date !== null){
@@ -45,7 +43,7 @@ const createMovieCard = (film) =>{
     <span class="film-card__comments">${comments.length} comments</span>
   </a>
   <div class="film-card__controls">
-    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${addToWatchlist(isWatchlist, classForElements)}" type="button">Add to watchlist</button>
+    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist? 'film-card__controls-item--active': ''}" type="button">Add to watchlist</button>
     <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
     <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
   </div>
@@ -97,15 +95,18 @@ export  default class CardMovieView extends AbstractView{
     }
   };
 
-  #watchlistClickHandler = () => {
-    this._callback.watchlistClick();
+  #watchlistClickHandler = (evt) => {
+    const target = evt.target;
+    this._callback.watchlistClick (target);
   };
 
-  #watchedClickHandler = () => {
-    this._callback.watchedClick();
+  #watchedClickHandler = (evt) => {
+    const target  = evt.target;
+    this._callback.watchedClick (target);
   };
 
-  #favoritesClickHandler = () => {
-    this._callback.favoritesClick();
+  #favoritesClickHandler = (evt) => {
+    const target  = evt.target;
+    this._callback.favoritesClick (target);
   };
 }

@@ -32,17 +32,34 @@ export default class RenderMovieCardsPopup {
 
     if (prevCardMovie === null || prevPopupForInformation === null) {
       render(this.#cardMovie, this.#filmsListContainer);
+      this.#popupForInformation = 1;
       return;
+    }
+    /*
+    const nodeFather = document.querySelector('.films-list__container');
+    const oldChild = document.querySelectorAll('.film-card');
+    //replaceNode ();
+
+    function replaceNode () {
+      const nodeChild = prevCardMovie.element;
+      oldChild.splice (2, 2, nodeChild);
+
+      const mean = nodeFather.contains(nodeChild);
+      if (!mean) {
+        nodeFather.appendChild(nodeChild);
+        nodeFather.replaceChild(document.querySelectorAll('.film-card')[5], oldChild[3]);
+      }
+    *
     }
 
     if (this.#filmContainer.contains(prevCardMovie.element)) {
-      replace(this.#cardMovie, prevCardMovie);
+
     }
 
     if (this.#filmContainer.contains(prevPopupForInformation.element)) {
       replace(this.#popupForInformation, prevPopupForInformation);
     }
-
+*/
     remove(prevCardMovie);
     remove(prevPopupForInformation);
   };
@@ -52,15 +69,30 @@ export default class RenderMovieCardsPopup {
     remove(this.#popupForInformation);
   };
 
-  #handleWatchlistClick = () => {
-    this.#changeData({...this.#dataMovie, isWatchlist: !this.#dataMovie.isWatchlist});
+  #handleWatchlistClick = (target) => {
+    if (target.classList.contains ('film-card__controls-item--active')) {
+      target.classList.remove ('film-card__controls-item--active');
+    } else {
+      target.classList.add ('film-card__controls-item--active');
+    }
+    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,watchlist : !this.#dataMovie.userDetails.watchlist}});
   };
 
-  #handleWatchedClick = () => {
+  #handleWatchedClick = (target) => {
+    if (target.classList.contains ('film-card__controls-item--active')) {
+      target.classList.remove ('film-card__controls-item--active');
+    } else {
+      target.classList.add ('film-card__controls-item--active');
+    }
     this.#changeData({...this.#dataMovie, isWatched: !this.#dataMovie.isWatched});
   };
 
-  #handleFavoritesClick = () => {
+  #handleFavoritesClick = (target) => {
+    if (target.classList.contains ('film-card__controls-item--active')) {
+      target.classList.remove ('film-card__controls-item--active');
+    } else {
+      target.classList.add ('film-card__controls-item--active');
+    }
     this.#changeData({...this.#dataMovie, isFavorites: !this.#dataMovie.isFavorites});
   };
 

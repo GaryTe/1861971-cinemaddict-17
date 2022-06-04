@@ -82,10 +82,10 @@ const filmDescription = () => ({
     'description': getRandomArrayElement(description)
   },
   'userDetails': {
-    'watchlist': Boolean(getRandomPositiveInteger(0, 1)),
-    'already_watched': Boolean(getRandomPositiveInteger(0, 1)),
+    'watchlist': false,
+    'already_watched': false,
     'watchingDate': '2019-04-12T02:12:32.554Z',
-    'favorite': Boolean(getRandomPositiveInteger(0, 1))
+    'favorite': false
   }
 });
 
