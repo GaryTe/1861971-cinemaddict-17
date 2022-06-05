@@ -5,7 +5,7 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import NoTaskView from '../view/no-task-view.js';
 import RenderMovieCardsPopup from './render-movie-cards-popup.js';
-import {render,remove} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import { updateItem } from '../utils.js';
 
 const NUMBER_DRAWING_MOVIE_CARDS = 5;
@@ -16,7 +16,6 @@ function searchElement(element) {
 
 export default class InterfaceRenderingPresenter {
   #films = [];
-  #movies = [];
   #counterOfNumberOfRenderedFilms = NUMBER_DRAWING_MOVIE_CARDS;
   #taskPresenter = new Map();
 
@@ -25,7 +24,6 @@ export default class InterfaceRenderingPresenter {
   #siteMainElement = document.querySelector('.main');
 
   #showMoreButton = new ShowMoreButtonView();
-  #filmContainer = new FilmContainerView();
 
   constructor(generatorObject){
     this.#films =[...generatorObject.getFilms()];
@@ -40,7 +38,7 @@ export default class InterfaceRenderingPresenter {
     render(new UserTitleView(), this.#headerLogo);
     render(new MainFilterElementsView(), this.#siteMainElement);
     render(new FilterElementsView(), this.#siteMainElement);
-    render(this.#filmContainer, this.#siteMainElement);
+    render(new FilmContainerView(), this.#siteMainElement);
   };
 
   #renderNoTask = () => {
@@ -50,7 +48,6 @@ export default class InterfaceRenderingPresenter {
   #showFirstFiveMovieCards = () => {
     for(let i=0; i<Math.min(this.#films.length, NUMBER_DRAWING_MOVIE_CARDS); i++){
       this.#callPopup(this.#films[i]);
-      this.#movies[i] = this.#films[i];
     }
   };
 
@@ -88,16 +85,9 @@ export default class InterfaceRenderingPresenter {
     this.#taskPresenter.get(updatedTask.id).init(updatedTask);
   };
 
-  #clearTaskList = () => {
-    this.#taskPresenter.forEach((presenter) => presenter.destroy());
-    this.#taskPresenter.clear();
-    this.#counterOfNumberOfRenderedFilms = NUMBER_DRAWING_MOVIE_CARDS;
-    remove(this.#showMoreButton);
-  };
-
   #callPopup = (film) => {
-    const renderMovieCardsPopup = new RenderMovieCardsPopup(this.#filmContainer,this.#handleTaskChange);
-    renderMovieCardsPopup.init(film, this.#movies);
+    const renderMovieCardsPopup = new RenderMovieCardsPopup(this.#handleTaskChange);
+    renderMovieCardsPopup.init(film);
     this.#taskPresenter.set(film.id, renderMovieCardsPopup);
   };
 }

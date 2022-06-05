@@ -1,11 +1,11 @@
 import CardMovieView from '../view/card-movie-view.js';
 import PopupForInformationView from '../view/popup-for-information-view.js';
-import {render,replace,remove} from '../framework/render.js';
+import {render} from '../framework/render.js';
+import { id } from '../utils.js';
 
 export default class RenderMovieCardsPopup {
   #changeData;
   #dataMovie;
-  #filmContainer;
 
   #cardMovie = null;
   #popupForInformation = null;
@@ -13,86 +13,47 @@ export default class RenderMovieCardsPopup {
   #body = document.querySelector('body');
   #filmsListContainer = document.querySelector('.films-list__container');
 
-  constructor(filmContainer,changeData) {
-    this.#filmContainer = filmContainer;
+  constructor(changeData) {
     this.#changeData = changeData;
   }
 
-  init = (movie, films) => {
+  init = (movie) => {
     this.#dataMovie = movie;
 
-    this.#openPopup(movie, films);
+    this.#openPopup(movie);
 
     const prevCardMovie = this.#cardMovie;
-    const prevPopupForInformation = this.#popupForInformation;
 
     this.#cardMovie.setWatchlist(this.#handleWatchlistClick);
     this.#cardMovie.setWatched(this.#handleWatchedClick);
     this.#cardMovie.setFavorites(this.#handleFavoritesClick);
 
-    if (prevCardMovie === null || prevPopupForInformation === null) {
+    if (this.#cardMovie === null || this.#popupForInformation === null) {
       render(this.#cardMovie, this.#filmsListContainer);
       this.#popupForInformation = 1;
       return;
     }
-    /*
-    const nodeFather = document.querySelector('.films-list__container');
-    const oldChild = document.querySelectorAll('.film-card');
-    //replaceNode ();
+    replaceNode ();
 
-    function replaceNode () {
+    function  replaceNode  ()  {
+      const nodeFather = document.querySelector('.films-list__container');
+      const oldChild = document.querySelectorAll('.film-card');
       const nodeChild = prevCardMovie.element;
-      oldChild.splice (2, 2, nodeChild);
 
-      const mean = nodeFather.contains(nodeChild);
-      if (!mean) {
-        nodeFather.appendChild(nodeChild);
-        nodeFather.replaceChild(document.querySelectorAll('.film-card')[5], oldChild[3]);
-      }
-    *
+      nodeFather.appendChild(nodeChild);
+      nodeFather.replaceChild(document.querySelectorAll('.film-card')[5], oldChild[id]);
     }
-
-    if (this.#filmContainer.contains(prevCardMovie.element)) {
-
-    }
-
-    if (this.#filmContainer.contains(prevPopupForInformation.element)) {
-      replace(this.#popupForInformation, prevPopupForInformation);
-    }
-*/
-    remove(prevCardMovie);
-    remove(prevPopupForInformation);
   };
 
-  destroy = () => {
-    remove(this.#cardMovie);
-    remove(this.#popupForInformation);
-  };
-
-  #handleWatchlistClick = (target) => {
-    if (target.classList.contains ('film-card__controls-item--active')) {
-      target.classList.remove ('film-card__controls-item--active');
-    } else {
-      target.classList.add ('film-card__controls-item--active');
-    }
+  #handleWatchlistClick = () => {
     this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,watchlist : !this.#dataMovie.userDetails.watchlist}});
   };
 
-  #handleWatchedClick = (target) => {
-    if (target.classList.contains ('film-card__controls-item--active')) {
-      target.classList.remove ('film-card__controls-item--active');
-    } else {
-      target.classList.add ('film-card__controls-item--active');
-    }
+  #handleWatchedClick = () => {
     this.#changeData({...this.#dataMovie, isWatched: !this.#dataMovie.isWatched});
   };
 
-  #handleFavoritesClick = (target) => {
-    if (target.classList.contains ('film-card__controls-item--active')) {
-      target.classList.remove ('film-card__controls-item--active');
-    } else {
-      target.classList.add ('film-card__controls-item--active');
-    }
+  #handleFavoritesClick = () => {
     this.#changeData({...this.#dataMovie, isFavorites: !this.#dataMovie.isFavorites});
   };
 
@@ -116,9 +77,9 @@ export default class RenderMovieCardsPopup {
     }
   }
 
-  #openPopup (film, movies) {
+  #openPopup (film) {
     this.#cardMovie= new CardMovieView(film);
-    this.#cardMovie.setClickHandler(this.#addHandlerCardMovie, movies);
+    this.#cardMovie.setClickHandler(this.#addHandlerCardMovie);
   }
 
   #addHandlerCardMovie = (film) => {

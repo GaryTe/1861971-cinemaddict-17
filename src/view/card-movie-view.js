@@ -52,8 +52,6 @@ const createMovieCard = (film) =>{
 };
 export  default class CardMovieView extends AbstractView{
   #film;
-  datas;
-  movie;
   constructor(film){
     super();
     this.#film = film;
@@ -63,10 +61,9 @@ export  default class CardMovieView extends AbstractView{
     return createMovieCard(this.#film);
   }
 
-  setClickHandler = (callback, movies) => {
+  setClickHandler = (callback) => {
     this._callback.click = callback;
-    this.element.addEventListener('click', this.#clickHandler);
-    this.datas = movies;
+    this.element.querySelector('img').addEventListener('click', this.#clickHandler);
   };
 
   setWatchlist = (callback) => {
@@ -84,29 +81,19 @@ export  default class CardMovieView extends AbstractView{
     this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#favoritesClickHandler);
   };
 
-  #clickHandler = (evt) => {
-    const target = evt.target.src.split('/');
-    for(let i=0; i<this.datas.length; i++){
-      const adds = this.datas[i].filmInfo.poster.split('/');
-      if(adds[adds.length-1] === target[target.length-1]){
-        this.movie = this.datas[i];
-        this._callback.click(this.movie);
-      }
-    }
+  #clickHandler = () => {
+    this._callback.click(this.#film);
   };
 
-  #watchlistClickHandler = (evt) => {
-    const target = evt.target;
-    this._callback.watchlistClick (target);
+  #watchlistClickHandler = () => {
+    this._callback.watchlistClick ();
   };
 
-  #watchedClickHandler = (evt) => {
-    const target  = evt.target;
-    this._callback.watchedClick (target);
+  #watchedClickHandler = () => {
+    this._callback.watchedClick ();
   };
 
-  #favoritesClickHandler = (evt) => {
-    const target  = evt.target;
-    this._callback.favoritesClick (target);
+  #favoritesClickHandler = () => {
+    this._callback.favoritesClick ();
   };
 }

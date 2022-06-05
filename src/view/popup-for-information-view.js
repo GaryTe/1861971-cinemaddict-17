@@ -1,10 +1,8 @@
-import {receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites} from '../utils.js';
+import {receiptDate, receiptTime} from '../utils.js';
 import AbstractView from '../framework/view/abstract-view';
 
 const createPopup = (substitutionData) =>{
   const {filmInfo,userDetails,comments,} = substitutionData;
-
-  const dataClass = 'film-details__control-button--active';
 
   function decodedData () {
     if(filmInfo['release'].date !== null){
@@ -123,9 +121,9 @@ const createPopup = (substitutionData) =>{
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${addToWatchlist(userDetails.watchlist, dataClass)}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--watched ${addAlreadyWatched(userDetails.already_watched, dataClass)}" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite ${addAddToFavorites(userDetails.favorite, dataClass)}" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${userDetails.watchlist? 'film-details__control-button--active': ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
