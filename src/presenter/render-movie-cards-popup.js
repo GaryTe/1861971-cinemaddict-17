@@ -23,6 +23,8 @@ export default class RenderMovieCardsPopup {
     this.#openPopup(movie);
 
     const prevCardMovie = this.#cardMovie;
+    const prevPopupForInformation = this.#popupForInformation;
+    const nodeBody = this.#body;
 
     this.#cardMovie.setWatchlist(this.#handleWatchlistClick);
     this.#cardMovie.setWatched(this.#handleWatchedClick);
@@ -41,7 +43,14 @@ export default class RenderMovieCardsPopup {
       const nodeChild = prevCardMovie.element;
 
       nodeFather.appendChild(nodeChild);
-      nodeFather.replaceChild(document.querySelectorAll('.film-card')[5], oldChild[id]);
+      const indexNode = document.querySelectorAll('.film-card').length-1;
+      nodeFather.replaceChild(document.querySelectorAll('.film-card')[indexNode], oldChild[id]);
+    }
+
+    if (nodeBody.contains(document.querySelector('.film-details'))) {
+      this.#addHandlerCardMovie (movie);
+    } else {
+      console.log (false);
     }
   };
 
@@ -50,11 +59,11 @@ export default class RenderMovieCardsPopup {
   };
 
   #handleWatchedClick = () => {
-    this.#changeData({...this.#dataMovie, isWatched: !this.#dataMovie.isWatched});
+    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,alreadyWatched : !this.#dataMovie.userDetails.alreadyWatched}});
   };
 
   #handleFavoritesClick = () => {
-    this.#changeData({...this.#dataMovie, isFavorites: !this.#dataMovie.isFavorites});
+    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,favorite : !this.#dataMovie.userDetails.favorite}});
   };
 
   #closePopup = () => {
@@ -86,6 +95,9 @@ export default class RenderMovieCardsPopup {
     this.#popupForInformation = new PopupForInformationView(film);
     render(this.#popupForInformation, this.#body);
     this.#popupForInformation.setClickHandler(this.#closePopup);
+    this.#popupForInformation.setWatchlist(this.#handleWatchlistClick);
+    this.#popupForInformation.setWatched(this.#handleWatchedClick);
+    this.#popupForInformation.setFavorites(this.#handleFavoritesClick);
     document.addEventListener('keydown',this.#popupCloseKey);
     this.#body.classList.add('hide-overflow');
     this.#checkingOpenPopups();

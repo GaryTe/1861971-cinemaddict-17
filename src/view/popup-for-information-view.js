@@ -122,8 +122,8 @@ const createPopup = (substitutionData) =>{
 
       <section class="film-details__controls">
         <button type="button" class="film-details__control-button film-details__control-button--watchlist ${userDetails.watchlist? 'film-details__control-button--active': ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${userDetails.alreadyWatched? 'film-details__control-button--active': ''}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${userDetails.favorite? 'film-details__control-button--active': ''}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -184,8 +184,35 @@ export  default class PopupForInformationView extends AbstractView{
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#clickHandler);
   };
 
+  setWatchlist = (callback) => {
+    this._callback.watchlistClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler);
+  };
+
+  setWatched = (callback) => {
+    this._callback.watchedClick = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
+  };
+
+  setFavorites = (callback) => {
+    this._callback.favoritesClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoritesClickHandler);
+  };
+
   #clickHandler = () => {
     this._callback.click();
+  };
+
+  #watchlistClickHandler = () => {
+    this._callback.watchlistClick ();
+  };
+
+  #watchedClickHandler = () => {
+    this._callback.watchedClick ();
+  };
+
+  #favoritesClickHandler = () => {
+    this._callback.favoritesClick ();
   };
 }
 

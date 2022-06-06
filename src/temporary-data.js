@@ -83,7 +83,7 @@ const filmDescription = () => ({
   },
   'userDetails': {
     'watchlist': false,
-    'already_watched': false,
+    'alreadyWatched': false,
     'watchingDate': '2019-04-12T02:12:32.554Z',
     'favorite': false
   }
