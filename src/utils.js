@@ -13,21 +13,6 @@ function getRandomArrayElement  (elements)  {
 const receiptDate = (dueDate) => dayjs(dueDate).format('D MMMM');
 const receiptTime = (dueTime) => dayjs(dueTime).format('H : mm');
 
-function addToWatchlist (data,classAssignment) {
-  if(data){
-    return  classAssignment;
-  }
-  return '';
-}
-
-function addAlreadyWatched (data, classAssignment) {
-  return  addToWatchlist (data, classAssignment);
-}
-
-function addAddToFavorites (data, classAssignment) {
-  return addToWatchlist (data, classAssignment);
-}
-
 function createElements () {
   let element = '<span class="film-details__genre"></span>';
   for(let i=0; i<1; i++){
@@ -38,4 +23,21 @@ function createElements () {
   return element;
 }
 
-export {getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, addToWatchlist, addAlreadyWatched, addAddToFavorites,createElements};
+let id = 0;
+
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+  id = index;
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+export {updateItem, getRandomArrayElement, getRandomPositiveInteger ,receiptDate, receiptTime, createElements, id};
