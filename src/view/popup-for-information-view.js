@@ -1,12 +1,9 @@
 import {receiptDate, receiptTime} from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
-const renderEmoji = (emoji) => emoji;
 
 const createPopup = (substitutionData) =>{
-  const {filmInfo,userDetails,comments,emoji} = substitutionData;
-
-  const feeling = renderEmoji(emoji);
+  const {filmInfo,userDetails,comments,emoji,description} = substitutionData;
 
   function decodedData () {
     if(filmInfo['release'].date !== null){
@@ -137,11 +134,11 @@ const createPopup = (substitutionData) =>{
        <ul class="film-details__comments-list">${getCommentsList()}</ul>
     <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-           ${feeling}
+          <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${description}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -172,34 +169,38 @@ const createPopup = (substitutionData) =>{
   );
 };
 export  default class PopupForInformationView extends AbstractStatefulView{
-  #indicatorsForComments;
   #radioButtons = [];
-  _emojis = [
-    '<img src="images/emoji/smile.png" width="55" height="55" alt="emoji-smile"></img>',
-    '<img src="images/emoji/sleeping.jpg" width="55" height="55" alt="emoji-smile"></img>',
-    '<img src="images/emoji/puke.png" width="55" height="55" alt="emoji-smile"></img>',
-    '<img src="images/emoji/angry.png" width="55" height="55" alt="emoji-smile"></img>'
-  ];
+  #dataScroll = 0;
+  _emojis = ['smile', 'sleeping', 'puke', 'angry'];
 
-  constructor(substitutionData, indicatorsForComments){
+  constructor(substitutionData){
     super();
-    this.#indicatorsForComments = indicatorsForComments;
     this._state = PopupForInformationView.parseTaskToState (substitutionData);
     this.#sethandlersForRadioButtons ();
+    this.#setHandersForTextarea ();
+    this.#scroll ();
   }
 
   get template() {
-    return createPopup(this._state, this.#indicatorsForComments);
+    return createPopup(this._state);
   }
 
-  static parseTaskToState = (task) => ({...task, emoji: '<img></img>'});
+  static parseTaskToState = (task) => ({...task, emoji: null});
 
   _restoreHandlers = () => {
     this.#sethandlersForRadioButtons ();
+    this.#setHandersForTextarea ();
+    this.#scroll ();
     this.setClickHandler (this._callback.click);
     this.setWatchlist (this._callback.watchlistClick);
     this.setWatched (this._callback.watchedClick);
     this.setFavorites (this._callback.favoritesClick);
+  };
+
+  #scroll = () => {
+    this.element.addEventListener ('scroll', () => {
+      this.#dataScroll = this.element.scrollTop;
+    });
   };
 
   #sethandlersForRadioButtons = () => {
@@ -212,6 +213,17 @@ export  default class PopupForInformationView extends AbstractStatefulView{
   #check = (radioButton, feeling) => {
     radioButton.addEventListener ('change', () => {
       this.updateElement ({emoji: feeling});
+      this.element.scrollBy (0, this.#dataScroll);
+    });
+  };
+
+  #setHandersForTextarea = () => {
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#descriptionComment);
+  };
+
+  #descriptionComment = (evt) => {
+    this._setState({
+      description: evt.target.value
     });
   };
 
