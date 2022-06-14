@@ -23,7 +23,6 @@ export default class RenderMovieCardsPopup {
     this.#openPopup(movie);
 
     const prevCardMovie = this.#cardMovie;
-    const prevPopupForInformation = this.#popupForInformation;
     const nodeBody = this.#body;
 
     this.#cardMovie.setWatchlist(this.#handleWatchlistClick);
@@ -49,8 +48,6 @@ export default class RenderMovieCardsPopup {
 
     if (nodeBody.contains(document.querySelector('.film-details'))) {
       this.#addHandlerCardMovie (movie);
-    } else {
-      console.log (false);
     }
   };
 
