@@ -1,9 +1,26 @@
 import {receiptDate, receiptTime} from '../utils.js';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
+const checkEmoji = (emoji) => {
+  if (emoji === null) {
+    return '';
+  }
+  return emoji;
+};
 
-const createPopup = (substitutionData) =>{
+const checkComment = (description) => {
+  if (description === undefined) {
+    return '';
+  }
+  return description;
+};
+
+const createPopup = (substitutionData) => {
   const {filmInfo,userDetails,comments,emoji,description} = substitutionData;
+
+  const emotion = checkEmoji (emoji);
+
+  const comment = checkComment (description);
 
   function decodedData () {
     if(filmInfo['release'].date !== null){
@@ -134,11 +151,11 @@ const createPopup = (substitutionData) =>{
        <ul class="film-details__comments-list">${getCommentsList()}</ul>
     <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-          <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">
+          ${emotion}
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${description}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -171,7 +188,12 @@ const createPopup = (substitutionData) =>{
 export  default class PopupForInformationView extends AbstractStatefulView{
   #radioButtons = [];
   #dataScroll = 0;
-  _emojis = ['smile', 'sleeping', 'puke', 'angry'];
+  _emojis = [
+    '<img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">',
+    '<img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji-smile">',
+    '<img src="./images/emoji/puke.png" width="55" height="55" alt="emoji-smile">',
+    '<img src="./images/emoji/angry.png" width="55" height="55" alt="emoji-smile">'
+  ];
 
   constructor(substitutionData){
     super();
@@ -227,7 +249,17 @@ export  default class PopupForInformationView extends AbstractStatefulView{
     });
   };
 
-  setClickHandler = (callback) => {
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('.film-details__inner').addEventListener('keydown', (evt) => {
+      if (evt.key === 'Ctrl') {
+        this.#formSubmitHandler ();
+      }
+    });
+  };
+
+  setClickHandler = (callback, valueScroll) => {
+    this.element.scrollBy (0, valueScroll);
     this._callback.click = callback;
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#clickHandler);
   };
@@ -252,15 +284,24 @@ export  default class PopupForInformationView extends AbstractStatefulView{
   };
 
   #watchlistClickHandler = () => {
-    this._callback.watchlistClick ();
+    this._callback.watchlistClick (this.#dataScroll);
   };
 
   #watchedClickHandler = () => {
-    this._callback.watchedClick ();
+    this._callback.watchedClick (this.#dataScroll);
   };
 
   #favoritesClickHandler = () => {
-    this._callback.favoritesClick ();
+    this._callback.favoritesClick (this.#dataScroll);
+  };
+
+  #formSubmitHandler = () => {
+    this._callback.formSubmit(PopupForInformationView.parseStateToTask(this._state));
+  };
+
+  static parseStateToTask = (state) => {
+    const task = {...state};
+    return task;
   };
 }
 

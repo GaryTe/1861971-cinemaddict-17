@@ -7,6 +7,7 @@ export default class RenderMovieCardsPopup {
   #changeData;
   #dataMovie;
 
+  #valueScroll = 0;
   #cardMovie = null;
   #popupForInformation = null;
 
@@ -51,16 +52,23 @@ export default class RenderMovieCardsPopup {
     }
   };
 
-  #handleWatchlistClick = () => {
+  #handleWatchlistClick = (dataScroll) => {
+    this.#valueScroll = dataScroll;
     this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,watchlist : !this.#dataMovie.userDetails.watchlist}});
   };
 
-  #handleWatchedClick = () => {
+  #handleWatchedClick = (dataScroll) => {
+    this.#valueScroll = dataScroll;
     this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,alreadyWatched : !this.#dataMovie.userDetails.alreadyWatched}});
   };
 
-  #handleFavoritesClick = () => {
+  #handleFavoritesClick = (dataScroll) => {
+    this.#valueScroll = dataScroll;
     this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,favorite : !this.#dataMovie.userDetails.favorite}});
+  };
+
+  #serverData = (objectsData) => {
+    const data = {objectsData};
   };
 
   #closePopup = () => {
@@ -68,6 +76,7 @@ export default class RenderMovieCardsPopup {
     const oldChild = document.querySelector('.film-details');
     this.#body.removeChild(oldChild);
     this.#body.classList.remove('hide-overflow');
+    this.#valueScroll = 0;
   };
 
   #popupCloseKey = (evt) => {
@@ -91,10 +100,11 @@ export default class RenderMovieCardsPopup {
   #addHandlerCardMovie = (film) => {
     this.#popupForInformation = new PopupForInformationView(film);
     render(this.#popupForInformation, this.#body);
-    this.#popupForInformation.setClickHandler(this.#closePopup);
+    this.#popupForInformation.setClickHandler(this.#closePopup, this.#valueScroll);
     this.#popupForInformation.setWatchlist(this.#handleWatchlistClick);
     this.#popupForInformation.setWatched(this.#handleWatchedClick);
     this.#popupForInformation.setFavorites(this.#handleFavoritesClick);
+    this.#popupForInformation.setFormSubmitHandler(this.#serverData);
     document.addEventListener('keydown',this.#popupCloseKey);
     this.#body.classList.add('hide-overflow');
     this.#checkingOpenPopups();
