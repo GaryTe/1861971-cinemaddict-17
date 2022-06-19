@@ -1,7 +1,7 @@
 import CardMovieView from '../view/card-movie-view.js';
 import PopupForInformationView from '../view/popup-for-information-view.js';
 import {render} from '../framework/render.js';
-import { id } from '../utils.js';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class RenderMovieCardsPopup {
   #changeData;
@@ -18,7 +18,7 @@ export default class RenderMovieCardsPopup {
     this.#changeData = changeData;
   }
 
-  init = (movie) => {
+  init = (movie, index) => {
     this.#dataMovie = movie;
 
     this.#openPopup(movie);
@@ -44,7 +44,7 @@ export default class RenderMovieCardsPopup {
 
       nodeFather.appendChild(nodeChild);
       const indexNode = document.querySelectorAll('.film-card').length-1;
-      nodeFather.replaceChild(document.querySelectorAll('.film-card')[indexNode], oldChild[id]);
+      nodeFather.replaceChild(document.querySelectorAll('.film-card')[indexNode], oldChild[index]);
     }
 
     if (nodeBody.contains(document.querySelector('.film-details'))) {
@@ -54,21 +54,34 @@ export default class RenderMovieCardsPopup {
 
   #handleWatchlistClick = (dataScroll) => {
     this.#valueScroll = dataScroll;
-    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,watchlist : !this.#dataMovie.userDetails.watchlist}});
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.PATCH,
+      {...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,watchlist : !this.#dataMovie.userDetails.watchlist}}
+    );
   };
 
   #handleWatchedClick = (dataScroll) => {
     this.#valueScroll = dataScroll;
-    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,alreadyWatched : !this.#dataMovie.userDetails.alreadyWatched}});
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.PATCH,
+      {...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,alreadyWatched : !this.#dataMovie.userDetails.alreadyWatched}}
+    );
   };
 
   #handleFavoritesClick = (dataScroll) => {
     this.#valueScroll = dataScroll;
-    this.#changeData({...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,favorite : !this.#dataMovie.userDetails.favorite}});
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.PATCH,
+      {...this.#dataMovie, userDetails:{... this.#dataMovie.userDetails,favorite : !this.#dataMovie.userDetails.favorite}}
+    );
   };
 
   #serverData = (objectsData) => {
     const data = {objectsData};
+    console.log (data);
   };
 
   #closePopup = () => {

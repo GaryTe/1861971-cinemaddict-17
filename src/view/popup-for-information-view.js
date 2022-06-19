@@ -54,7 +54,7 @@ const createPopup = (substitutionData) => {
     return genres;
   }
 
-  function getCommentsList() {
+  const getCommentsList = () => {
     const list = [];
     for(let i=0; i<comments.length; i++){
       const detailsFilm = document.createElement('li');
@@ -73,11 +73,11 @@ const createPopup = (substitutionData) => {
       list.push(detailsFilm);
     }
     return list;
-  }
+  };
 
   return (
     `<section class="film-details">
-<form class="film-details__inner" action="" method="get">
+<form class="film-details__inner" action="" method="get" tabindex = "0">
     <div class="film-details__top-container">
       <div class="film-details__close">
         <button class="film-details__close-btn" type="button">close</button>
@@ -252,7 +252,7 @@ export  default class PopupForInformationView extends AbstractStatefulView{
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('.film-details__inner').addEventListener('keydown', (evt) => {
-      if (evt.key === 'Ctrl') {
+      if (evt.ctrlKey) {
         this.#formSubmitHandler ();
       }
     });
