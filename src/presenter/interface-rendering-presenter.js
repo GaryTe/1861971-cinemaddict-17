@@ -1,5 +1,4 @@
 import UserTitleView from '../view/user-title-view.js';
-import MainFilterElementsView from '../view/main-filter-elements-view.js';
 import FilterElementsView from '../view/filter-elements-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmContainerView from '../view/film-container-view.js';
@@ -49,7 +48,6 @@ export default class InterfaceRenderingPresenter {
 
   #renderElement = () => {
     render(new UserTitleView(), this.#headerLogo);
-    render(new MainFilterElementsView(), this.#siteMainElement);
     this.#renderSort ();
     render(new FilmContainerView(), this.#siteMainElement);
   };
@@ -94,7 +92,7 @@ export default class InterfaceRenderingPresenter {
   }
 
   #showMovieCards = (tasks) => {
-    tasks.forEach((task) => this.#callPopup(task))
+    tasks.forEach((task) => this.#callPopup(task));
   };
 
   #passValue = () => {

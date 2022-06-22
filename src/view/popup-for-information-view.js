@@ -46,34 +46,32 @@ const createPopup = (substitutionData) => {
   function createElements () {
     const genres = [];
     for(let i=0; i<filmInfo.genre.length; i++){
-      const element = document.createElement('span');
-      element.classList.add('film-details__genre');
-      element.textContent = filmInfo.genre[i];
+      const element = `<span class="film-details__genre">${filmInfo.genre[i]}</span>`;
       genres.push(element);
     }
     return genres;
   }
 
-  const getCommentsList = () => {
+  function getCommentsList() {
     const list = [];
     for(let i=0; i<comments.length; i++){
-      const detailsFilm = document.createElement('li');
-      detailsFilm.classList.add('film-details__comment');
-      detailsFilm.insertAdjacentHTML ('beforeend' , `<span class="film-details__comment-emoji">
-            <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-          </span>
-          <div>
-            <p class="film-details__comment-text">${comments[i].comment}</p>
-            <p class="film-details__comment-info">
-              <span class="film-details__comment-author">Tim Macoveev</span>
-              <span class="film-details__comment-day">2019/12/31 23:59</span>
-              <button class="film-details__comment-delete">Delete</button>
-            </p>
-          </div>`);
+      const detailsFilm = `<li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+      <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comments[i].comment}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">Tim Macoveev</span>
+          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+      </li>`;
       list.push(detailsFilm);
     }
     return list;
-  };
+  }
 
   return (
     `<section class="film-details">
@@ -252,7 +250,8 @@ export  default class PopupForInformationView extends AbstractStatefulView{
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
     this.element.querySelector('.film-details__inner').addEventListener('keydown', (evt) => {
-      if (evt.ctrlKey) {
+      if (evt.key === 'Control') {return;}
+      if (evt.ctrlKey && evt.key === 'Enter') {
         this.#formSubmitHandler ();
       }
     });

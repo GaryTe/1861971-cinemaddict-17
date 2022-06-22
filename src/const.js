@@ -1,3 +1,11 @@
+const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites'
+};
+
+
 const SortType = {
   SORT_BY_DEFAUL: 'sort-by-defaul',
   SORT_BY_DATE: 'sort-by-date',
@@ -16,4 +24,4 @@ const UpdateType = {
   MAJOR: 'MAJOR',
 };
 
-export {SortType, UserAction, UpdateType};
+export {FilterType, SortType, UserAction, UpdateType};
